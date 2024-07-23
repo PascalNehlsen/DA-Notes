@@ -4,6 +4,7 @@ import {
   collection,
   doc,
   onSnapshot,
+  addDoc,
 } from '@angular/fire/firestore';
 import { Note } from '../interfaces/note.interface';
 import { Observable } from 'rxjs';
@@ -23,6 +24,16 @@ export class NoteListService {
   constructor() {
     this.unsubNotes = this.subNotesList();
     this.unsubTrash = this.subTrashList();
+  }
+
+  async addNote(item: Note) {
+    await addDoc(this.getNotesRef(), item)
+      .catch((err) => {
+        console.error(err);
+      })
+      .then((docRef) => {
+        console.log('Document written with ID:', docRef?.id);
+      });
   }
 
   setNoteObject(obj: any, id: string): Note {
